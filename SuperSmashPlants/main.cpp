@@ -175,9 +175,9 @@ void load_game_resources()
 	mciSendString(_T("open resources/sun_explode.mp3 alias sun_explode"), NULL, 0, NULL);
 	mciSendString(_T("open resources/sun_explode_ex.mp3 alias sun_explode_ex"), NULL, 0, NULL);
 	mciSendString(_T("open resources/sun_text.mp3 alias sun_text"), NULL, 0, NULL);
-	mciSendString(_T("open resources/ui_confirm.mp3 alias ui_confirm"), NULL, 0, NULL);
-	mciSendString(_T("open resources/ui_switch.mp3 alias ui_switch"), NULL, 0, NULL);
-	mciSendString(_T("open resources/ui_win.mp3 alias ui_win"), NULL, 0, NULL);
+	mciSendString(_T("open resources/ui_confirm.wav alias ui_confirm"), NULL, 0, NULL);
+	mciSendString(_T("open resources/ui_switch.wav alias ui_switch"), NULL, 0, NULL);
+	mciSendString(_T("open resources/ui_win.wav alias ui_win"), NULL, 0, NULL);
 
 
 }
