@@ -85,6 +85,7 @@ Scene* game_scene = nullptr;
 Scene* selector_scene = nullptr;
 
 SceneManager scene_manager;
+Camera main_camera;
 
 // Í¼¼¯·­×ª
 void flip_atlas(Atlas& src, Atlas& dst)
@@ -215,7 +216,7 @@ int main()
 		last_tick_time = current_tick_time;
 
 		cleardevice();
-		scene_manager.on_draw();
+		scene_manager.on_draw(main_camera);
 
 		FlushBatchDraw();
 
