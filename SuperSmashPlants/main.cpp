@@ -2,7 +2,7 @@
 #include"menu_scene.h"
 #include "game_scene.h"
 #include "scene_manager.h"
-#include "selector.h"
+#include "selector_scene.h"
 #include "atlas.h"
 #include "util.h"
 #include "timer.h"
@@ -190,6 +190,8 @@ int main()
 	load_game_resources();
 
 	initgraph(1280, 720, EW_SHOWCONSOLE);
+	settextstyle(28, 0, _T("IPix"));	// 字体样式
+	setbkmode(TRANSPARENT);				// 背景透明
 
 	BeginBatchDraw();
 

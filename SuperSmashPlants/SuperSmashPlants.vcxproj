@@ -129,7 +129,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="scene_manager.h" />
-    <ClCompile Include="selector.h" />
+    <ClCompile Include="selector_scene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h" />

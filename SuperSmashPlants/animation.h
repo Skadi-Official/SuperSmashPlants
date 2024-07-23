@@ -3,6 +3,7 @@
 
 #include"atlas.h"
 #include"util.h"
+#include"camera.h"
 
 #include<graphics.h>
 #include<functional>
@@ -65,7 +66,7 @@ public:
 		this->callback = callback;
 	}
 
-	// 动画更新
+	// 动画更新，改变index来改变绘制的图
 	void on_update(int delta)
 	{
 		timer += delta;
@@ -84,9 +85,9 @@ public:
 	}
 
 	// 绘制
-	void on_draw(int x, int y)const
+	void on_draw(const Camera& camera, int x, int y)const
 	{
-		putimage_alpha(x, y, atlas->get_image(idx_frame));
+		putimage_alpha(camera, x, y, atlas->get_image(idx_frame));
 	}
 
 	

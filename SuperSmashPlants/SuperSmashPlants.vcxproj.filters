@@ -21,10 +21,10 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="scene_manager.h">
-      <Filter>头文件</Filter>
+    <ClCompile Include="selector_scene.h">
+      <Filter>头文件\scene</Filter>
     </ClCompile>
-    <ClCompile Include="selector.h">
+    <ClCompile Include="scene_manager.h">
       <Filter>头文件\scene</Filter>
     </ClCompile>
   </ItemGroup>
