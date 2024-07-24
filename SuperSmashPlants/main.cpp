@@ -36,7 +36,7 @@ IMAGE img_sunflower_selector_background_left;	// 选角界面朝向左的向日葵背景图片
 IMAGE img_sunflower_selector_background_right;	// 选角界面朝向右的向日葵背景图片
 												// 
 IMAGE img_sky;									// 天空图片
-IMAGE img_hill;									// 山脉图片
+IMAGE img_hills;									// 山脉图片
 IMAGE img_platfrom_large;						// 小型平台图片
 IMAGE img_platfrom_small;						// 大型平台图片
 												// 
@@ -128,7 +128,7 @@ void load_game_resources()
 	flip_image(&img_sunflower_selector_background_right, &img_sunflower_selector_background_left);
 
 	loadimage(&img_sky, _T("resources/sky.png"));
-	loadimage(&img_hill, _T("resources/hills.png"));
+	loadimage(&img_hills, _T("resources/hills.png"));
 	loadimage(&img_platfrom_large, _T("resources/platform_large.png"));
 	loadimage(&img_platfrom_small, _T("resources/platform_small.png"));
 

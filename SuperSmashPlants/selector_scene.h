@@ -249,6 +249,10 @@ public:
 				mciSendString(_T("play ui_switch from 0"), NULL, 0, NULL);
 				// ¡ú
 				break;
+			case VK_RETURN:
+				mciSendString(_T("play ui_confirm from 0"), NULL, 0, NULL);
+				scene_manager.switch_to(SceneManager::SceneType::Game);
+				break;
 			}
 			break;
 		default:
