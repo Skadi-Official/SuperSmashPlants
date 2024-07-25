@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -137,7 +137,12 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="game_scene.h" />
     <ClInclude Include="menu_scene.h" />
+    <ClInclude Include="peashooter_player.h" />
+    <ClInclude Include="platform.h" />
+    <ClInclude Include="player.h" />
+    <ClInclude Include="player_id.h" />
     <ClInclude Include="scene.h" />
+    <ClInclude Include="sunflower_player.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="util.h" />
     <ClInclude Include="vector2.h" />

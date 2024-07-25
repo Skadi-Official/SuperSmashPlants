@@ -6,10 +6,16 @@
 #include "atlas.h"
 #include "util.h"
 #include "timer.h"
+#include "platform.h"
+#include "player.h"
+
+
 #include<graphics.h>
 #include<time.h>
 
 #pragma comment(lib, "Winmm.lib")
+
+bool is_debug = false;							// 是否开启调试模式 
 
 IMAGE img_menu_background;						// 主菜单背景图片
 	
@@ -36,9 +42,9 @@ IMAGE img_sunflower_selector_background_left;	// 选角界面朝向左的向日葵背景图片
 IMAGE img_sunflower_selector_background_right;	// 选角界面朝向右的向日葵背景图片
 												// 
 IMAGE img_sky;									// 天空图片
-IMAGE img_hills;									// 山脉图片
-IMAGE img_platfrom_large;						// 小型平台图片
-IMAGE img_platfrom_small;						// 大型平台图片
+IMAGE img_hills;								// 山脉图片
+IMAGE img_platform_large;						// 大型平台图片
+IMAGE img_platform_small;						// 小型平台图片
 												// 
 IMAGE img_1P_cursor;							// 1P 指示光标图片
 IMAGE img_2P_cursor;							// 2P 指示光标图片
@@ -87,6 +93,11 @@ Scene* selector_scene = nullptr;
 SceneManager scene_manager;
 Camera main_camera;
 
+std::vector<Platform> platform_list;
+
+Player* player_1 = nullptr;
+Player* player_2 = nullptr;
+
 // 图集翻转
 void flip_atlas(Atlas& src, Atlas& dst)
 {
@@ -129,8 +140,8 @@ void load_game_resources()
 
 	loadimage(&img_sky, _T("resources/sky.png"));
 	loadimage(&img_hills, _T("resources/hills.png"));
-	loadimage(&img_platfrom_large, _T("resources/platform_large.png"));
-	loadimage(&img_platfrom_small, _T("resources/platform_small.png"));
+	loadimage(&img_platform_large, _T("resources/platform_large.png"));
+	loadimage(&img_platform_small, _T("resources/platform_small.png"));
 
 	loadimage(&img_1P_cursor, _T("resources/1P_cursor.png"));
 	loadimage(&img_2P_cursor, _T("resources/2P_cursor.png"));
@@ -185,7 +196,7 @@ void load_game_resources()
 int main()
 {
 	ExMessage msg;
-	const int FPS = 60;
+	const int FPS = 144;
 
 	load_game_resources();
 
@@ -204,15 +215,15 @@ int main()
 
 	while (true)
 	{
-		DWORD frame_start_time = clock();
+		DWORD frame_start_time = GetTickCount();
 
 		while (peekmessage(&msg))
 		{
 			scene_manager.on_input(msg);
 		}
 
-		static DWORD last_tick_time = clock();
-		DWORD current_tick_time = clock();
+		static DWORD last_tick_time = GetTickCount();
+		DWORD current_tick_time = GetTickCount();
 		DWORD delta_tick_time = current_tick_time - last_tick_time;
 		scene_manager.on_update(delta_tick_time); // 本次主循环又经过了多少时间
 		last_tick_time = current_tick_time;
@@ -222,7 +233,7 @@ int main()
 
 		FlushBatchDraw();
 
-		DWORD frame_end_time = clock();
+		DWORD frame_end_time = GetTickCount();
 		DWORD frame_delta_time = frame_start_time - frame_end_time;
 		if (frame_delta_time < 1000 / FPS)
 			Sleep(1000 / FPS - frame_delta_time);

@@ -1,7 +1,10 @@
 #ifndef _UTIL_H_
 #define _UTIL_H_
 #include <graphics.h>
-
+/*
+util 头文件通常用于存放实用工具函数、宏定义、类型定义和其他一些通用功能，这些功能在多个地方可能会被重用。
+它们通常与具体的类或模块无关，而是提供了一些独立且通用的功能。
+*/
 #pragma comment(lib, "MSIMG32.LIB")
 
 // 将图像水平翻转
@@ -46,6 +49,12 @@ inline void putimage_alpha(int dst_x, int dst_y,int width, int height, IMAGE* im
 	int h = height > 0 ? height: img->getheight();
 	AlphaBlend(GetImageHDC(NULL), dst_x, dst_y, w, h,
 		GetImageHDC(img), src_x, src_y, w, h, { AC_SRC_OVER, 0 ,255, AC_SRC_ALPHA });
+}
+
+inline void line(const Camera& camera, int x1, int y1, int x2, int y2)
+{
+	const Vector2& pos_camera = camera.get_position();
+	line((int)(x1 - pos_camera.x), (int)(y1 - pos_camera.y), (int)(x2 - pos_camera.x), (int)(y2 - pos_camera.y));
 }
 
 

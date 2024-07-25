@@ -4,7 +4,12 @@
 #include "scene.h"
 #include "animation.h"
 #include "scene_manager.h"
+#include "peashooter_player.h"
+#include "sunflower_player.h"
+#include "player_id.h"
 
+extern Player* player_1;
+extern Player* player_2;
 extern IMAGE img_VS;									// VS 艺术字图片
 extern IMAGE img_1P;									// 1P 文本图片
 extern IMAGE img_2P;									// 2P 文本图片
@@ -253,6 +258,9 @@ public:
 				mciSendString(_T("play ui_confirm from 0"), NULL, 0, NULL);
 				scene_manager.switch_to(SceneManager::SceneType::Game);
 				break;
+			case VK_ESCAPE:
+				scene_manager.switch_to(SceneManager::SceneType::Menu);
+				break;
 			}
 			break;
 		default:
@@ -262,7 +270,31 @@ public:
 
 	void on_exit()
 	{
+		switch (player_type_1)
+		{
+		case SelectorScene::PlayerType::Peashooter:
+			player_1 = new PeashooterPlayer();
+			break;
+		case SelectorScene::PlayerType::Sunflower:
+			player_1 = new SunflowerPlayer();
+			break;
+		default:
+			break;
+		}
+		player_1->set_id(PlayerID::P1);
 
+		switch (player_type_2)
+		{
+		case SelectorScene::PlayerType::Peashooter:
+			player_2 = new PeashooterPlayer();
+			break;
+		case SelectorScene::PlayerType::Sunflower:
+			player_2 = new SunflowerPlayer();
+			break;
+		default:
+			break;
+		}
+		player_2->set_id(PlayerID::P2);
 	}
 
 private:
