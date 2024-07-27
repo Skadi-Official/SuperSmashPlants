@@ -68,7 +68,7 @@ public:
 private:
 	void spawn_pea_bullet(float speed)
 	{
-		Bullet* bullet = new Bullet();
+		Bullet* bullet = new PeaBullet();
 
 		Vector2 bullet_position, bullet_velocity;
 		const Vector2& bullet_size = bullet->get_size();
@@ -104,6 +104,7 @@ private:
 		std::cout << bullet_position.x << std::endl;
 		std::cout << bullet_position.y << std::endl;
 		std::cout << bullet << std::endl;
+		std::cout << bullet->get_damege() << std::endl;
 		bullet_list.push_back(bullet);
 	}
 

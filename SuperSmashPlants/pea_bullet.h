@@ -44,7 +44,7 @@ public:
 		}
 	}
 
-	void on_update(int delta)
+	void on_update(int delta) 
 	{	
 		std::cout << "pea_bullet on_update" << std::endl;
 		position += velocity * (float)delta;
@@ -59,7 +59,7 @@ public:
 		}
 	}
 
-	void on_draw(const Camera& camera) const
+	void on_draw(const Camera& camera) const 
 	{	
 		std::cout << "pea_bullet on_draw" << std::endl;
 		if (valid)

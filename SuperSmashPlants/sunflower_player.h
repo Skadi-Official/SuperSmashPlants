@@ -116,6 +116,7 @@ public:
 		std::cout << bullet_position.x << std::endl;
 		std::cout << bullet_position.y << std::endl;
 		std::cout << bullet << std::endl;
+		std::cout << bullet->get_damege() << std::endl;
 		bullet_list.push_back(bullet);
 	}
 
