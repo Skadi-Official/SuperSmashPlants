@@ -46,7 +46,7 @@ public:
 
 	void on_update(int delta) 
 	{	
-		std::cout << "pea_bullet on_update" << std::endl;
+		//std::cout << "pea_bullet on_update" << std::endl;
 		position += velocity * (float)delta;
 		if (!valid)
 		{
@@ -61,7 +61,7 @@ public:
 
 	void on_draw(const Camera& camera) const 
 	{	
-		std::cout << "pea_bullet on_draw" << std::endl;
+		//std::cout << "pea_bullet on_draw" << std::endl;
 		if (valid)
 		{	
 			putimage_alpha(camera, (int)position.x, (int)position.y, &img_pea);
