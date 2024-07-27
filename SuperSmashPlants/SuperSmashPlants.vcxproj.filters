@@ -19,6 +19,9 @@
     <Filter Include="头文件\player">
       <UniqueIdentifier>{0b7dd235-a74e-43c6-8704-49dfa2e75e01}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\bullet">
+      <UniqueIdentifier>{65b109de-95de-4501-b5fe-5feaad0e2928}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -73,6 +76,18 @@
     </ClInclude>
     <ClInclude Include="player_id.h">
       <Filter>头文件\player</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet.h">
+      <Filter>头文件\bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="pea_bullet.h">
+      <Filter>头文件\bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="sun_bullet.h">
+      <Filter>头文件\bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="sun_bullet_ex.h">
+      <Filter>头文件\bullet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

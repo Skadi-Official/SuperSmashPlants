@@ -48,15 +48,13 @@ public:
 
 	virtual void on_jump()					// 跳跃方法
 	{	
-		/*if (velocity.y != 0)
+		if (velocity.y != 0)
 		{
 			return;
 		}
 		std::cout << velocity.y << std::endl;
-		
-		std::cout << velocity.y << std::endl;*/
-
 		velocity.y += jump_velocity;
+		std::cout << velocity.y << std::endl;
 	}
 
 	virtual void on_draw(const Camera& camera)
@@ -167,7 +165,7 @@ public:
 protected:
 	void move_and_collide(int delta)
 	{	
-		velocity.y = gravity * delta;			// v = g*t(竖直方向上)
+		velocity.y += gravity * delta;			// v = g*t(竖直方向上)
 		position += velocity * (float)delta;	// s = v*t
 
 		if (velocity.y > 0)		// 注意，y轴大于0才是在下落
@@ -185,7 +183,6 @@ protected:
 
 				if (is_collide_x && is_collide_y)
 				{	
-					is_jumped = false;
 					float delta_pos_y = velocity.y * delta;	// 玩家这一帧在y移动的距离
 					float last_tick_foot_pos_y = position.y + size.y - delta_pos_y;		// 上一帧玩家脚底的位置
 					if (last_tick_foot_pos_y <= shape.y)	// 如果上一帧脚底在碰撞线上方，且xy方向上都发生碰撞
@@ -200,7 +197,7 @@ protected:
 	}
 
 protected:
-	const float gravity = 3.0e-2f;		// 玩家重力
+	const float gravity = 1.6e-3f;		// 玩家重力
 	const float run_velocity = 0.55f;	// 跑动速度
 	const float jump_velocity = -0.85f; // 跳跃速度
 
@@ -222,7 +219,6 @@ protected:
 	bool is_right_key_down = false;		// 向右移动按键是否按下
 
 	bool is_facing_right = true;		// 角色是否朝向右侧	
-	bool is_jumped = false;
 };
 
 #endif // !_PLAYER_H_
