@@ -90,8 +90,8 @@ public:
 			&& this->position.y + this->size.y / 2 <= position.y + size.y;
 	}
 
-	virtual void on_update(int delta){ }
-	virtual void on_draw(const Camera& camera){ }
+	virtual void on_update(int delta) {}
+	virtual void on_draw(const Camera& camera) const {}
 protected:
 	Vector2 size;								// ×Óµ¯³ß´ç
 	Vector2 position;							// ×Óµ¯Î»ÖÃ

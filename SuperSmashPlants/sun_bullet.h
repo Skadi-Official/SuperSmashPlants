@@ -45,7 +45,8 @@ public:
 	}
 
 	void on_update(int delta)
-	{
+	{	
+		//std::cout << "sun bullet update" << std::endl;
 		if (valid)
 		{
 			velocity.y += gravity * delta;
@@ -69,7 +70,7 @@ public:
 
 	void on_draw(const Camera& camera) const
 	{
-		std::cout << "sun is drawing" << std::endl;
+		//std::cout << "sun_bullet drawing" << std::endl;
 		if (valid)
 		{
 			animation_idle.on_draw(camera, (int)position.x, (int)position.y);

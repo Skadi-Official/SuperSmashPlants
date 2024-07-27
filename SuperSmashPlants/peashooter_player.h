@@ -101,6 +101,9 @@ private:
 
 		bullet->set_callback([&]() {mp += 25; });
 
+		std::cout << bullet_position.x << std::endl;
+		std::cout << bullet_position.y << std::endl;
+		std::cout << bullet << std::endl;
 		bullet_list.push_back(bullet);
 	}
 

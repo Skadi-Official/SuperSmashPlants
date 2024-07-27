@@ -87,6 +87,7 @@ public:
 
 		for (Bullet* bullet : bullet_list)
 		{
+			//std::cout << "bullet_list on_update" << std::endl;
 			bullet->on_update(delta);
 		}
 			
@@ -111,6 +112,7 @@ public:
 
 		for (Bullet* bullet : bullet_list)
 		{	
+			//std::cout << "bullet_list on_draw" << std::endl;
 			bullet->on_draw(camera);
 		}
 			
