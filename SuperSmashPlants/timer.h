@@ -56,7 +56,7 @@ public:
 		if (pass_time >= wait_time)
 		{
 			if ((!ont_shot || (ont_shot && !shotted)) && callback)
-			// 定时器不是单词触发，或者定时器单次触发并且没有被触发过，则表示可以继续触发
+			// 定时器不是单次触发，或者定时器单次触发并且没有被触发过，则表示可以继续触发
 			// 同时还要检查callback是否有效
 				callback();
 			shotted = true;

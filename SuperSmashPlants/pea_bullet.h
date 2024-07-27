@@ -3,6 +3,7 @@
 
 #include"bullet.h"
 #include"animation.h"
+#include<iostream>
 
 extern IMAGE img_pea;
 extern Atlas atlas_pea_break;
@@ -44,10 +45,10 @@ public:
 	}
 
 	void on_update(int delta)
-	{
+	{	
+		std::cout << "pea on_update" << std::endl;
 		position += velocity * (float)delta;
-
-		if (valid != true)
+		if (!valid)
 		{
 			animation_break.on_update(delta);
 		}
@@ -59,10 +60,11 @@ public:
 	}
 
 	void on_draw(const Camera& camera) const
-	{
+	{	
 		if (valid)
-		{
+		{	
 			putimage_alpha(camera, (int)position.x, (int)position.y, &img_pea);
+			std::cout << "pea" << std::endl;
 		}
 		else
 		{

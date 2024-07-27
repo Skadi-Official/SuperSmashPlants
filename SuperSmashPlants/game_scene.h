@@ -7,6 +7,7 @@
 #include "platform.h"
 #include "player.h"
 #include <vector>
+#include <iostream>
 
 extern Player* player_1;
 extern Player* player_2;
@@ -14,6 +15,7 @@ extern IMAGE img_sky;
 extern IMAGE img_hills;
 extern IMAGE img_platform_large;
 extern IMAGE img_platform_small;
+extern IMAGE img_pea;
 
 extern Camera main_camera;
 extern std::vector<Platform> platform_list;
@@ -80,6 +82,14 @@ public:
 	{
 		player_1->on_update(delta);
 		player_2->on_update(delta);
+
+		main_camera.on_update(delta);
+
+		for (Bullet* bullet : bullet_list)
+		{
+			bullet->on_update(delta);
+		}
+			
 	}
 
 	void on_draw(const Camera& camera)
@@ -98,6 +108,12 @@ public:
 
 		player_1->on_draw(camera);
 		player_2->on_draw(camera);
+
+		for (Bullet* bullet : bullet_list)
+		{	
+			bullet->on_draw(camera);
+		}
+			
 	}
 
 	void on_input(const ExMessage& msg)

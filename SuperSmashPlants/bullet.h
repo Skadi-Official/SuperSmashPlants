@@ -22,7 +22,7 @@ public:
 	{
 		return damege;
 	}
-
+	 
 	void set_position(float x, float y)			//初始化子弹位置
 	{
 		position.x = x;

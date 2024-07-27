@@ -48,7 +48,7 @@ public:
 	{
 		if (valid)
 		{
-			velocity.y = gravity * delta;
+			velocity.y += gravity * delta;
 			position += velocity * (float)delta;
 		}
 
@@ -61,7 +61,7 @@ public:
 			animation_idle.on_update(delta);
 		}
 
-		if (check_if_exceeds_screen)
+		if (check_if_exceeds_screen())
 		{
 			can_remove = true;
 		}
@@ -69,6 +69,7 @@ public:
 
 	void on_draw(const Camera& camera) const
 	{
+		std::cout << "sun is drawing" << std::endl;
 		if (valid)
 		{
 			animation_idle.on_draw(camera, (int)position.x, (int)position.y);

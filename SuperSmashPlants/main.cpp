@@ -8,7 +8,7 @@
 #include "timer.h"
 #include "platform.h"
 #include "player.h"
-
+#include "bullet.h"
 
 #include<graphics.h>
 #include<time.h>
@@ -94,7 +94,7 @@ SceneManager scene_manager;
 Camera main_camera;
 
 std::vector<Platform> platform_list;
-
+std::vector<Bullet*> bullet_list;
 Player* player_1 = nullptr;
 Player* player_2 = nullptr;
 
@@ -143,6 +143,7 @@ void load_game_resources()
 	loadimage(&img_platform_large, _T("resources/platform_large.png"));
 	loadimage(&img_platform_small, _T("resources/platform_small.png"));
 
+
 	loadimage(&img_1P_cursor, _T("resources/1P_cursor.png"));
 	loadimage(&img_2P_cursor, _T("resources/2P_cursor.png"));
 
@@ -163,6 +164,14 @@ void load_game_resources()
 	flip_atlas(atlas_sunflower_attack_ex_right, atlas_sunflower_attack_ex_left);
 	atlas_sunflower_die_right.load_from_file(_T("resources/sunflower_die_%d.png"), 2);
 	flip_atlas(atlas_sunflower_die_right, atlas_sunflower_die_left);
+
+	loadimage(&img_pea, _T("resources/pea.png"));
+	atlas_pea_break.load_from_file(_T("resources/pea_break_%d.png"), 3);
+	atlas_sun.load_from_file(_T("resources/sun_%d.png"), 5);
+	atlas_sun_explode.load_from_file(_T("resources/sun_explode_%d.png"), 5);
+	atlas_sun_ex.load_from_file(_T("resources/sun_ex_%d.png"), 5);
+	atlas_sun_ex_explode.load_from_file(_T("resources/sun_ex_explode_%d.png"), 5);
+	atlas_sun_text.load_from_file(_T("resources/sun_text_%d.png"), 6);
 
 	atlas_run_effect.load_from_file(_T("resource/run_effect_%d.png"), 4);
 	atlas_jump_effect.load_from_file(_T("resource/jump_effect_%d.png"), 5);
@@ -230,7 +239,6 @@ int main()
 
 		cleardevice();
 		scene_manager.on_draw(main_camera);
-
 		FlushBatchDraw();
 
 		DWORD frame_end_time = GetTickCount();

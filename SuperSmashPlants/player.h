@@ -6,19 +6,33 @@
 #include"animation.h"
 #include"player_id.h"
 #include"platform.h"
+#include"bullet.h"
 
 #include<graphics.h>
-#include<iostream>
 
 extern std::vector<Platform> platform_list;
+extern std::vector<Bullet*> bullet_list;
+
 class Player
 {
 public:
 	Player()
 	{
 		current_animation = &animation_idle_right;
+
+		timer_attack_cd.set_wait_time(attack_cd);
+		timer_attack_cd.set_one_shot(true);
+		timer_attack_cd.set_callback([&]() { can_attack = true; });
 	}
 	~Player() = default;
+
+	virtual void on_run(float distance)		// 奔跑方法，根据位移修改玩家水平方向坐标
+	{
+		if (is_attacking_ex)
+			return;
+
+		position.x += distance;
+	}
 
 	virtual void on_update(int delta)
 	{
@@ -38,23 +52,20 @@ public:
 
 		current_animation->on_update(delta);
 
+		timer_attack_cd.on_update(delta);
+
 		move_and_collide(delta);
 	}
 
-	virtual void on_run(float distance)		// 奔跑方法，根据位移修改玩家水平方向坐标
-	{
-		position.x += distance;
-	}
+	
 
 	virtual void on_jump()					// 跳跃方法
 	{	
-		if (velocity.y != 0)
+		if (velocity.y != 0 || is_attacking_ex)
 		{
 			return;
 		}
-		std::cout << velocity.y << std::endl;
 		velocity.y += jump_velocity;
-		std::cout << velocity.y << std::endl;
 	}
 
 	virtual void on_draw(const Camera& camera)
@@ -84,6 +95,23 @@ public:
 					// W
 					on_jump();
 					break;
+				case 0x46:
+					// F
+					if (can_attack)
+					{
+						on_attack();
+						can_attack = false;
+						timer_attack_cd.restart();
+					}
+					break;
+				case 0x47:
+					// G
+					if (mp >= 100)
+					{
+						on_attack_ex();
+						mp = 0;
+					}
+					break;
 				default:
 					break;
 				}
@@ -102,6 +130,23 @@ public:
 				case VK_UP:
 					// ↑
 					on_jump();
+					break;
+				case VK_OEM_PERIOD:
+					// .
+					if (can_attack)
+					{
+						on_attack();
+						can_attack = false;
+						timer_attack_cd.restart();
+					}
+					break;
+				case VK_OEM_2:
+					// /
+					if (mp >= 100)
+					{
+						on_attack_ex();
+						mp = 0;
+					}
 					break;
 				default:
 					break;
@@ -162,6 +207,18 @@ public:
 		position.y = y;
 	}
 
+	const Vector2& get_position() const
+	{
+		return position;
+	}
+
+	const Vector2& get_size() const
+	{
+		return size;
+	}
+
+	virtual void on_attack() { }
+	virtual void on_attack_ex() { }
 protected:
 	void move_and_collide(int delta)
 	{	
@@ -202,6 +259,8 @@ protected:
 	const float jump_velocity = -0.85f; // 跳跃速度
 
 protected:
+	int mp = 0;							// 角色能量
+	int hp = 100;						// 角色血量
 	Vector2 size;						// 角色尺寸
 	Vector2 position;					// 角色位置
 	Vector2 velocity;					// 角色速度
@@ -210,6 +269,8 @@ protected:
 	Animation animation_idle_right;		// 朝向右的默认动画
 	Animation animation_run_left;		// 朝向左的奔跑动画
 	Animation animation_run_right;		// 朝向右的奔跑动画
+	Animation animation_attack_ex_left;	// 朝向左的特殊攻击动画
+	Animation animation_attack_ex_right;// 朝向右的特殊攻击动画
 
 	Animation* current_animation = nullptr;	//当前正在播放的动画
 
@@ -219,6 +280,13 @@ protected:
 	bool is_right_key_down = false;		// 向右移动按键是否按下
 
 	bool is_facing_right = true;		// 角色是否朝向右侧	
+
+	int attack_cd = 500;				// 普通攻击冷却时间 ms
+	bool can_attack = true;				// 是否可以释放普通攻击
+
+	Timer timer_attack_cd;				// 普通攻击冷却定时器
+
+	bool is_attacking_ex = false;		// 是否正在释放特殊攻击
 };
 
 #endif // !_PLAYER_H_

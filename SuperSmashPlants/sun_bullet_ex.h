@@ -1,5 +1,6 @@
 #ifndef _SUN_BULLET_EX_H_
 #define _SUN_BULLET_EX_H_
+
 #include"bullet.h"
 #include"animation.h"
 
@@ -68,7 +69,7 @@ public:
 			animation_idle.on_update(delta);
 		}
 
-		if (check_if_exceeds_screen)
+		if (check_if_exceeds_screen())
 		{
 			can_remove = true;
 		}
