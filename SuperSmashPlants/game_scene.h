@@ -85,6 +85,22 @@ public:
 
 		main_camera.on_update(delta);
 
+		bullet_list.erase(
+			std::remove_if(
+				bullet_list.begin(),		// 需要检查的范围的开始
+				bullet_list.end(),			// 需要检查的范围的结束
+				[](const Bullet* bullet)	// Lambda 表达式，用来判断是否需要删除
+				{
+					bool deletable = bullet->check_can_remove();
+					if (deletable)
+					{
+						delete bullet;
+					}
+					return deletable;
+				}),
+			bullet_list.end()				// 需要删除的范围的结束
+		);
+
 		for (Bullet* bullet : bullet_list)
 		{
 			//std::cout << "bullet_list on_update" << std::endl;

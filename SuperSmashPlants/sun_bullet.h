@@ -46,7 +46,7 @@ public:
 
 	void on_update(int delta)
 	{	
-		//std::cout << "sun bullet update" << std::endl;
+		//std::cout << "sun bullet update" << std::endl;//
 		if (valid)
 		{
 			velocity.y += gravity * delta;

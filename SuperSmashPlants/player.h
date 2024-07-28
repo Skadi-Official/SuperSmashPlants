@@ -23,6 +23,16 @@ public:
 		timer_attack_cd.set_wait_time(attack_cd);
 		timer_attack_cd.set_one_shot(true);
 		timer_attack_cd.set_callback([&]() { can_attack = true; });
+
+		timer_invulnerable.set_wait_time(750);
+		timer_invulnerable.set_one_shot(true);
+		timer_invulnerable.set_callback([&]() { is_invulnerable = false; });
+
+		timer_invulnerable_blink.set_wait_time(75);
+		timer_invulnerable_blink.set_callback([&]()
+			{
+				is_showing_sketch_frame = !is_showing_sketch_frame;
+			});
 	}
 	~Player() = default;
 
@@ -53,6 +63,14 @@ public:
 		current_animation->on_update(delta);
 
 		timer_attack_cd.on_update(delta);
+		timer_invulnerable.on_update(delta);
+		timer_invulnerable_blink.on_update(delta);
+
+		if (is_showing_sketch_frame == true)
+		{	
+			// 判断当前是否需要显示剪影图片，如果有则把当前帧图片抓取出来处理为剪影效果保存
+			sketch_image(current_animation->get_frame(), &img_sketch);
+		}
 
 		move_and_collide(delta);
 	}
@@ -70,7 +88,15 @@ public:
 
 	virtual void on_draw(const Camera& camera)
 	{
-		current_animation->on_draw(camera, (int)position.x, (int)position.y);
+		if (hp > 0 && is_invulnerable && is_showing_sketch_frame)
+		{
+			putimage_alpha(camera, (int)position.x, (int)position.y, &img_sketch);
+		}
+		else
+		{
+			current_animation->on_draw(camera, (int)position.x, (int)position.y);
+		}
+		
 	}
 
 	virtual void on_input(const ExMessage& msg)
@@ -217,6 +243,13 @@ public:
 		return size;
 	}
 
+	void make_invulnerable()
+	{
+		is_invulnerable = true;
+		timer_invulnerable.restart();
+	}
+
+
 	virtual void on_attack() { }
 	virtual void on_attack_ex() { }
 protected:
@@ -248,6 +281,28 @@ protected:
 						velocity.y = 0;						// 竖直方向速度调整为 0 
 						break;
 					}
+				}
+			}
+		}
+
+		if (is_invulnerable == false)
+		{
+			for (Bullet* bullet : bullet_list)
+			{
+				if (bullet->get_valid() == false || bullet->get_collide_target() != id)
+				{
+					// 如果当前子弹无效，或者碰撞目标的id和当前角色id不匹配，直接跳过
+					continue;
+				}
+
+				// 没有跳过则需要判断是否发生碰撞
+				if (bullet->check_collision(position, size))
+				{
+					// 发生碰撞则调用对应方法，并且设置它为不可继续发生碰撞
+					make_invulnerable();
+					bullet->on_collide();
+					bullet->set_valid(false);
+					hp -= bullet->get_damege();
 				}
 			}
 		}
@@ -287,6 +342,13 @@ protected:
 	Timer timer_attack_cd;				// 普通攻击冷却定时器
 
 	bool is_attacking_ex = false;		// 是否正在释放特殊攻击
+
+	IMAGE img_sketch;						// 动画帧剪影图片
+	bool is_invulnerable = false;			// 角色是否处于无敌状态
+	bool is_showing_sketch_frame = false;	// 当前帧是否应该显示剪影
+	Timer timer_invulnerable;				// 无敌状态定时器
+	Timer timer_invulnerable_blink;			// 无敌状态闪烁定时器
+
 };
 
 #endif // !_PLAYER_H_
