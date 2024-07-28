@@ -81,6 +81,8 @@ public:
 				(int)(position.x + explode_render_offset.x),
 				(int)(position.y + explode_render_offset.y));
 		}
+
+		Bullet::on_draw(camera);
 	}
 
 private:
