@@ -52,7 +52,10 @@ public:
 
 		if (direction != 0)
 		{
-			is_facing_right = direction > 0;
+			if (is_attacking_ex == false)
+			{
+				is_facing_right = direction > 0;
+			}
 			current_animation = is_facing_right ? &animation_run_right : &animation_run_left;
 			float distance = direction * run_velocity * delta;	// 这一帧中，玩家在水平方向上移动的距离
 			on_run(distance);
@@ -60,6 +63,18 @@ public:
 		else
 		{
 			current_animation = is_facing_right ? &animation_run_right : &animation_run_left;
+		}
+
+		if (is_attacking_ex)
+		{
+			if (is_facing_right)
+			{
+				current_animation = &animation_attack_ex_right;
+			}
+			else
+			{
+				current_animation = &animation_attack_ex_left;
+			}
 		}
 
 		current_animation->on_update(delta);
