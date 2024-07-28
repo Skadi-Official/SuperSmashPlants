@@ -123,7 +123,7 @@ public:
 		}
 		else
 		{
-			current_animation = is_facing_right ? &animation_run_right : &animation_run_left;
+			current_animation = is_facing_right ? &animation_idle_right : &animation_idle_left;
 			timer_run_effect_generation.pause();
 		}
 
@@ -152,6 +152,14 @@ public:
 		if (hp <= 0)
 		{
 			timer_die_effect_generation.on_update(delta);
+			if (last_hurt_direction.x < 0)
+			{
+				current_animation = &animation_die_left;
+			}
+			else
+			{
+				current_animation = &animation_die_right;
+			}
 		}
 
 		particle_list.erase(std::remove_if(
@@ -428,9 +436,14 @@ protected:
 	{	
 		float last_velocity_y = velocity.y;
 
-
 		velocity.y += gravity * delta;			// v = g*t(竖直方向上)
 		position += velocity * (float)delta;	// s = v*t
+
+		// 血量小于 0 的时候不与任何物体发生互动
+		if (hp <= 0)
+		{
+			return;
+		}
 
 		if (velocity.y > 0)		// 注意，y轴大于0才是在下落
 		{
@@ -483,6 +496,23 @@ protected:
 					bullet->on_collide();
 					bullet->set_valid(false);
 					hp -= bullet->get_damege();
+
+					// 作差得到最后一次收到攻击的方向
+					last_hurt_direction = bullet->get_position() - position;
+					if (hp <= 0)
+					{	
+						// x 轴方向的值要与收到攻击方向相反
+						// 小于 0 则表示攻击来自左边，大于 0 则表示攻击来自右边
+						if (last_hurt_direction.x < 0)
+						{
+							velocity.x = 0.35f;
+						}
+						else
+						{
+							velocity.x = -0.35f;
+						}
+						velocity.y = -1.0f;
+					}
 				}
 			}
 		}
@@ -508,6 +538,8 @@ protected:
 	Animation animation_attack_ex_right;// 朝向右的特殊攻击动画
 	Animation animation_jump_effect;	// 跳跃特效动画
 	Animation animation_land_effect;	// 落地特效动画
+	Animation animation_die_left;		// 朝向左的死亡动画
+	Animation animation_die_right;		// 朝向右的死亡动画
 
 	bool is_jump_effect_visible = false;// 跳跃动画是否可见
 	bool is_land_effect_visible = false;// 落地动画是否可见
@@ -543,6 +575,8 @@ protected:
 
 	bool is_cursor_visible = true;			// 玩家光标指示器是否显示
 	Timer timer_cursor_visibility;			// 玩家光标指示器可见性定时器
+
+	Vector2 last_hurt_direction;			// 最后一次收到攻击的方向
 };
 
 #endif // !_PLAYER_H_
