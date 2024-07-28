@@ -265,6 +265,16 @@ public:
 		return size;
 	}
 
+	int get_hp() const
+	{
+		return hp;
+	}
+
+	int get_mp() const
+	{
+		return mp;
+	}
+
 	void make_invulnerable()
 	{
 		is_invulnerable = true;

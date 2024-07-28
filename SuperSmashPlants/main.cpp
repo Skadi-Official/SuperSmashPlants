@@ -98,6 +98,9 @@ std::vector<Bullet*> bullet_list;
 Player* player_1 = nullptr;
 Player* player_2 = nullptr;
 
+IMAGE* img_player_1_avater = nullptr;
+IMAGE* img_player_2_avater = nullptr;
+
 // Í¼¼¯·­×ª
 void flip_atlas(Atlas& src, Atlas& dst)
 {
