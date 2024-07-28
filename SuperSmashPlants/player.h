@@ -60,7 +60,25 @@ public:
 				particle_position.y = position.y + size.y - frame->getheight();
 				particle_list.emplace_back(particle_position, &atlas_run_effect, 150);
 			});
+
+		animation_jump_effect.set_atlas(&atlas_jump_effect);
+		animation_jump_effect.set_interval(25);
+		animation_jump_effect.set_loop(false);
+		animation_jump_effect.set_callback([&]()
+			{
+				is_jump_effect_visible = false;
+			});
+
+		animation_land_effect.set_atlas(&atlas_land_effect);
+		animation_land_effect.set_interval(50);
+		animation_land_effect.set_loop(false);
+		animation_land_effect.set_callback([&]()
+			{
+				is_land_effect_visible = false;
+			});
 	}
+
+
 	~Player() = default;
 
 	virtual void on_run(float distance)		// 奔跑方法，根据位移修改玩家水平方向坐标
@@ -105,6 +123,8 @@ public:
 		}
 
 		current_animation->on_update(delta);
+		animation_jump_effect.on_update(delta);
+		animation_land_effect.on_update(delta);
 
 		timer_attack_cd.on_update(delta);
 		timer_invulnerable.on_update(delta);
@@ -148,10 +168,36 @@ public:
 			return;
 		}
 		velocity.y += jump_velocity;
+		is_jump_effect_visible = true;
+		animation_jump_effect.reset();
+
+		IMAGE* effect_frame = animation_jump_effect.get_frame();
+		position_jump_effect.x = position.x + (size.x - effect_frame->getwidth()) / 2;
+		position_jump_effect.y = position.y + size.y - effect_frame->getheight();
+	}
+
+	virtual void on_land()
+	{
+		is_land_effect_visible = true;
+		animation_land_effect.reset();
+
+		IMAGE* effect_frame = animation_jump_effect.get_frame();
+		position_land_effect.x = position.x + (size.x - effect_frame->getwidth()) / 2;
+		position_land_effect.y = position.y + size.y - effect_frame->getheight();
 	}
 
 	virtual void on_draw(const Camera& camera)
 	{
+		if (is_jump_effect_visible)
+		{
+			animation_jump_effect.on_draw(camera, (int)position_jump_effect.x, (int)position_jump_effect.y);
+		}
+
+		if (is_land_effect_visible)
+		{
+			animation_land_effect.on_draw(camera, (int)position_land_effect.x, (int)position_land_effect.y);
+		}
+
 		for (const Particle& particle : particle_list)
 		{
 			//std::cout << "particle on draw" << std::endl;
@@ -340,6 +386,9 @@ public:
 protected:
 	void move_and_collide(int delta)
 	{	
+		float last_velocity_y = velocity.y;
+
+
 		velocity.y += gravity * delta;			// v = g*t(竖直方向上)
 		position += velocity * (float)delta;	// s = v*t
 
@@ -364,6 +413,12 @@ protected:
 					{
 						position.y = shape.y - size.y;		// 矫正位置
 						velocity.y = 0;						// 竖直方向速度调整为 0 
+
+						if (last_velocity_y != 0)
+						{
+							on_land();
+						}
+
 						break;
 					}
 				}
