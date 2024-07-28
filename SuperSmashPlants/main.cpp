@@ -176,9 +176,9 @@ void load_game_resources()
 	atlas_sun_ex_explode.load_from_file(_T("resources/sun_ex_explode_%d.png"), 5);
 	atlas_sun_text.load_from_file(_T("resources/sun_text_%d.png"), 6);
 
-	atlas_run_effect.load_from_file(_T("resource/run_effect_%d.png"), 4);
-	atlas_jump_effect.load_from_file(_T("resource/jump_effect_%d.png"), 5);
-	atlas_land_effect.load_from_file(_T("resource/land_effect_%d.png"), 2);
+	atlas_run_effect.load_from_file(_T("resources/run_effect_%d.png"), 4);
+	atlas_jump_effect.load_from_file(_T("resources/jump_effect_%d.png"), 5);
+	atlas_land_effect.load_from_file(_T("resources/land_effect_%d.png"), 2);
 
 	loadimage(&img_1P_winner, _T("resources/1P_winner.png"));
 	loadimage(&img_2P_winner, _T("resources/2P_winner.png"));

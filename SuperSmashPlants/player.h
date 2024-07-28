@@ -7,10 +7,15 @@
 #include"player_id.h"
 #include"platform.h"
 #include"bullet.h"
+#include"particle.h"
 
 #include<graphics.h>
-
+#include<iostream>
 extern bool is_debug;
+
+extern Atlas atlas_run_effect;
+extern Atlas atlas_jump_effect;
+extern Atlas atlas_land_effect;
 
 extern std::vector<Platform> platform_list;
 extern std::vector<Bullet*> bullet_list;
@@ -35,6 +40,26 @@ public:
 			{
 				is_showing_sketch_frame = !is_showing_sketch_frame;
 			});
+
+		timer_run_effect_generation.set_wait_time(75);
+		timer_run_effect_generation.set_callback([&]() 
+			{
+				Vector2 particle_position;
+				IMAGE* frame = atlas_run_effect.get_image(0);
+				particle_position.x = position.x + (size.x - frame->getwidth()) / 2;
+				particle_position.y = position.y + size.y - frame->getheight();
+				particle_list.emplace_back(particle_position, &atlas_run_effect, 45);
+			});
+
+		timer_die_effect_generation.set_wait_time(35);
+		timer_die_effect_generation.set_callback([&]()
+			{
+				Vector2 particle_position;
+				IMAGE* frame = atlas_run_effect.get_image(0);
+				particle_position.x = position.x + (size.x - frame->getwidth()) / 2;
+				particle_position.y = position.y + size.y - frame->getheight();
+				particle_list.emplace_back(particle_position, &atlas_run_effect, 150);
+			});
 	}
 	~Player() = default;
 
@@ -44,6 +69,7 @@ public:
 			return;
 
 		position.x += distance;
+		timer_run_effect_generation.resume();
 	}
 
 	virtual void on_update(int delta)
@@ -63,6 +89,7 @@ public:
 		else
 		{
 			current_animation = is_facing_right ? &animation_run_right : &animation_run_left;
+			timer_run_effect_generation.pause();
 		}
 
 		if (is_attacking_ex)
@@ -82,6 +109,26 @@ public:
 		timer_attack_cd.on_update(delta);
 		timer_invulnerable.on_update(delta);
 		timer_invulnerable_blink.on_update(delta);
+		timer_run_effect_generation.on_update(delta);
+
+		if (hp <= 0)
+		{
+			timer_die_effect_generation.on_update(delta);
+		}
+
+		particle_list.erase(std::remove_if(
+			particle_list.begin(), particle_list.end(),
+			[](const Particle& particle)
+			{
+				return !particle.check_valid();
+			}),
+			particle_list.end());
+
+		for (Particle& particle : particle_list)
+		{	
+			//std::cout << "particle update" << std::endl;
+			particle.on_update(delta);
+		}
 
 		if (is_showing_sketch_frame == true)
 		{	
@@ -105,6 +152,12 @@ public:
 
 	virtual void on_draw(const Camera& camera)
 	{
+		for (const Particle& particle : particle_list)
+		{
+			//std::cout << "particle on draw" << std::endl;
+			particle.on_draw(camera);
+		}
+
 		if (hp > 0 && is_invulnerable && is_showing_sketch_frame)
 		{
 			putimage_alpha(camera, (int)position.x, (int)position.y, &img_sketch);
@@ -358,6 +411,14 @@ protected:
 	Animation animation_run_right;		// 朝向右的奔跑动画
 	Animation animation_attack_ex_left;	// 朝向左的特殊攻击动画
 	Animation animation_attack_ex_right;// 朝向右的特殊攻击动画
+	Animation animation_jump_effect;	// 跳跃特效动画
+	Animation animation_land_effect;	// 落地特效动画
+
+	bool is_jump_effect_visible = false;// 跳跃动画是否可见
+	bool is_land_effect_visible = false;// 落地动画是否可见
+
+	Vector2 position_jump_effect;		// 跳跃动画播放位置
+	Vector2 position_land_effect;		// 落地动画播放位置
 
 	Animation* current_animation = nullptr;	//当前正在播放的动画
 
@@ -381,6 +442,9 @@ protected:
 	Timer timer_invulnerable;				// 无敌状态定时器
 	Timer timer_invulnerable_blink;			// 无敌状态闪烁定时器
 
+	std::vector<Particle> particle_list;	// 粒子对象列表
+	Timer timer_run_effect_generation;		// 跑动特效粒子定时发射器
+	Timer timer_die_effect_generation;		// 死亡特效粒子定时发射器
 };
 
 #endif // !_PLAYER_H_
