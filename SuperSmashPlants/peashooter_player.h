@@ -17,7 +17,7 @@ extern Camera main_camera;
 class PeashooterPlayer : public Player
 {
 public:
-	PeashooterPlayer()
+	PeashooterPlayer(bool facing_right = true) : Player(facing_right)
 	{
 		animation_idle_left.set_atlas(&atlas_peashooter_idle_left);
 		animation_idle_right.set_atlas(&atlas_peashooter_idle_right);
